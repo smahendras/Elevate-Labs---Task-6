@@ -1,0 +1,20 @@
+use restaurent;
+
+/*Subquery with (IN)*/
+/*Customers who placed orders over ₹500*/
+SELECT customerName FROM customer
+WHERE customerId IN (SELECT customerId FROM orders WHERE total_amount > 500);
+
+
+/*Subquery with (EXISTS)*/
+/*Checks if a match exists — often faster than IN.
+Example: Customers who have placed any order*/
+SELECT customerName FROM customer WHERE EXISTS 
+	(SELECT 1 FROM orders WHERE orders.customerId = customer.customerId);
+
+/*Subquery with ( = )*/
+/*Used when the subquery returns a single value.
+Example: Find the customer who placed the highest-value order*/
+
+SELECT customerName FROM customer WHERE customerId = 
+	(SELECT customerId FROM orders ORDER BY total_amount DESC LIMIT 1);
